@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             MessageSeeder::class,
             RecipientSeeder::class,
+            MessageQueueSeeder::class,
         ]);
     }
 }
