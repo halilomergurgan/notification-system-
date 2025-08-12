@@ -25,5 +25,4 @@ interface MessageRepositoryInterface extends BaseRepositoryInterface
      * @return Message
      */
     public function update(int $id, array $data): Message;
-
 }

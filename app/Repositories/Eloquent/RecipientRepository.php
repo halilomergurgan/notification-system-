@@ -10,11 +10,6 @@ use Illuminate\Database\Eloquent\Collection;
 class RecipientRepository extends BaseRepository implements RecipientRepositoryInterface
 {
     /**
-     * @var Recipient
-     */
-    protected Recipient $model;
-
-    /**
      * RecipientRepository constructor.
      *
      * @param Recipient $model
@@ -72,6 +67,7 @@ class RecipientRepository extends BaseRepository implements RecipientRepositoryI
     {
         $recipient = $this->find($id);
         $recipient->update($data);
+
         return $recipient;
     }
 }

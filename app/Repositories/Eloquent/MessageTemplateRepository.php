@@ -10,11 +10,6 @@ use Illuminate\Database\Eloquent\Collection;
 class MessageTemplateRepository extends BaseRepository implements MessageTemplateRepositoryInterface
 {
     /**
-     * @var MessageTemplate
-     */
-    protected MessageTemplate $model;
-
-    /**
      * MessageTemplateRepository constructor.
      *
      * @param MessageTemplate $model
@@ -72,6 +67,7 @@ class MessageTemplateRepository extends BaseRepository implements MessageTemplat
     {
         $template = $this->find($id);
         $template->update($data);
+
         return $template;
     }
 }

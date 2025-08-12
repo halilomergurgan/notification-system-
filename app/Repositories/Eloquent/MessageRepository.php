@@ -10,11 +10,6 @@ use Illuminate\Database\Eloquent\Collection;
 class MessageRepository extends BaseRepository implements MessageRepositoryInterface
 {
     /**
-     * @var Message
-     */
-    protected Message $model;
-
-    /**
      * MessageRepository constructor.
      *
      * @param Message $model
@@ -72,6 +67,8 @@ class MessageRepository extends BaseRepository implements MessageRepositoryInter
     {
         $message = $this->find($id);
         $message->update($data);
+
         return $message;
     }
+
 }

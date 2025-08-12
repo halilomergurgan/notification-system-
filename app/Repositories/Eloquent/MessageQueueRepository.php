@@ -10,11 +10,6 @@ use Illuminate\Database\Eloquent\Collection;
 class MessageQueueRepository extends BaseRepository implements MessageQueueRepositoryInterface
 {
     /**
-     * @var MessageQueue
-     */
-    protected MessageQueue $model;
-
-    /**
      * MessageQueueRepository constructor.
      *
      * @param MessageQueue $model
@@ -72,6 +67,8 @@ class MessageQueueRepository extends BaseRepository implements MessageQueueRepos
     {
         $queue = $this->find($id);
         $queue->update($data);
+
         return $queue;
     }
+
 }
