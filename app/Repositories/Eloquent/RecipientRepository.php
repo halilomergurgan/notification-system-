@@ -3,7 +3,6 @@
 namespace App\Repositories\Eloquent;
 
 use App\Models\Recipient;
-use App\Repositories\BaseRepository;
 use App\Repositories\Interfaces\RecipientRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 

@@ -25,4 +25,37 @@ interface MessageQueueRepositoryInterface extends BaseRepositoryInterface
      * @return MessageQueue
      */
     public function update(int $id, array $data): MessageQueue;
+
+    /**
+     * @param int $limit
+     * @return Collection
+     */
+    public function getPendingMessages(int $limit = 2): Collection;
+
+    /**
+     * @param int $id
+     * @param string $providerMessageId
+     * @param array $providerResponse
+     * @return MessageQueue
+     */
+    public function markAsSent(int $id, string $providerMessageId, array $providerResponse): MessageQueue;
+
+    /**
+     * @param int $id
+     * @param array $providerResponse
+     * @return MessageQueue
+     */
+    public function markAsFailed(int $id, array $providerResponse): MessageQueue;
+
+    /**
+     * @return Collection
+     */
+    public function getSentMessages(): Collection;
+
+    /**
+     * @param int $id
+     * @param $scheduledAt
+     * @return void
+     */
+    public function updateScheduledAt(int $id, $scheduledAt): void;
 }
