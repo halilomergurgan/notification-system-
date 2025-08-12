@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\MessageTemplate;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,50 +17,22 @@ class MessageFactory extends Factory
      */
     public function definition(): array
     {
-        $type = fake()->randomElement(['sms', 'email']);
-
-        $titles = [
-            "Sipariş Bildirimi",
-            "Randevu Onayı",
-            "Kampanya Duyurusu",
-            "Kargo Takip Bildirimi",
-            "Ödeme Onayı",
-            "Güvenlik Uyarısı",
-            "Hoşgeldin Mesajı",
-            "Doğrulama Kodu",
-            "İndirim Fırsatı",
-            "Teslimat Bilgisi"
-        ];
-
-        $smsTemplates = [
-            "Sayın {name}, siparişiniz hazır! Takip kodu: {code}",
-            "Değerli müşterimiz, {date} tarihli randevunuzu onaylıyoruz.",
-            "İndirim kampanyamız başladı! Kodunuz: {code}",
-            "Siparişiniz yola çıktı! Takip no: {code}",
-            "Sayın {name}, ödemeniz alındı. İyi alışverişler!",
-        ];
-
-        $emailTemplates = [
-            "Sayın {name},\n\nSiparişiniz başarıyla oluşturuldu. Sipariş detaylarınız:\nSipariş Kodu: {code}\nTeslimat Tarihi: {date}\n\nBizi tercih ettiğiniz için teşekkür ederiz.",
-            "Değerli Müşterimiz {name},\n\nMağazamızdaki özel kampanyalardan faydalanmak için {code} kodunu kullanabilirsiniz. Kampanya {date} tarihine kadar geçerlidir.\n\nSaygılarımızla.",
-            "Merhaba {name},\n\nHesabınızda şüpheli bir işlem tespit ettik. Güvenliğiniz için lütfen {code} kodunu kullanarak doğrulama yapınız.\n\nİyi günler dileriz.",
-        ];
-
-        $content = $type === 'sms'
-            ? fake()->randomElement($smsTemplates)
-            : fake()->randomElement($emailTemplates);
+        $template = MessageTemplate::query()
+            ->where('is_active', true)
+            ->inRandomOrder()
+            ->first() ?? MessageTemplate::factory()->create();
 
         return [
-            'title' => fake()->randomElement($titles),
-            'content' => $content,
-            'type' => $type,
-            'character_count' => strlen($content),
-            'sms_count' => $type === 'sms' ? ceil(strlen($content) / 160) : 1,
-            'variables' => json_encode([
-                'name' => '{name}',
-                'code' => '{code}',
-                'date' => '{date}'
-            ]),
+            'title' => $template->name,
+            'content' => $template->content,
+            'type' => $template->type,
+            'character_count' => strlen($template->content),
+            'sms_count' => $template->type === 'sms' ? ceil(strlen($template->content) / 160) : 1,
+            'variables' => json_encode(array_combine(
+                $template->variables,
+                array_map(fn($var) => '{'.$var.'}', $template->variables)
+            )),
+            'template_id' => $template->id,
             'is_active' => fake()->boolean(80),
             'scheduled_at' => fake()->optional(40)->dateTimeBetween('now', '+2 weeks'),
             'created_at' => now(),
@@ -73,20 +46,19 @@ class MessageFactory extends Factory
     public function sms()
     {
         return $this->state(function (array $attributes) {
-            $smsTemplates = [
-                "Sayın {name}, siparişiniz hazır! Takip kodu: {code}",
-                "Değerli müşterimiz, {date} tarihli randevunuzu onaylıyoruz.",
-                "İndirim kampanyamız başladı! Kodunuz: {code}",
-                "Siparişiniz yola çıktı! Takip no: {code}",
-                "Sayın {name}, ödemeniz alındı. İyi alışverişler!",
-            ];
+            $template = MessageTemplate::query()
+                ->where('is_active', true)
+                ->where('type', 'sms')
+                ->inRandomOrder()
+                ->first() ?? MessageTemplate::factory()->smsTemplate()->create();
 
-            $content = fake()->randomElement($smsTemplates);
             return [
+                'title' => $template->name,
+                'content' => $template->content,
                 'type' => 'sms',
-                'content' => $content,
-                'character_count' => strlen($content),
-                'sms_count' => ceil(strlen($content) / 160),
+                'character_count' => strlen($template->content),
+                'sms_count' => ceil(strlen($template->content) / 160),
+                'template_id' => $template->id,
             ];
         });
     }
@@ -97,18 +69,19 @@ class MessageFactory extends Factory
     public function email()
     {
         return $this->state(function (array $attributes) {
-            $emailTemplates = [
-                "Sayın {name},\n\nSiparişiniz başarıyla oluşturuldu. Sipariş detaylarınız:\nSipariş Kodu: {code}\nTeslimat Tarihi: {date}\n\nBizi tercih ettiğiniz için teşekkür ederiz.",
-                "Değerli Müşterimiz {name},\n\nMağazamızdaki özel kampanyalardan faydalanmak için {code} kodunu kullanabilirsiniz. Kampanya {date} tarihine kadar geçerlidir.\n\nSaygılarımızla.",
-                "Merhaba {name},\n\nHesabınızda şüpheli bir işlem tespit ettik. Güvenliğiniz için lütfen {code} kodunu kullanarak doğrulama yapınız.\n\nİyi günler dileriz.",
-            ];
+            $template = MessageTemplate::query()
+                ->where('is_active', true)
+                ->where('type', 'email')
+                ->inRandomOrder()
+                ->first() ?? MessageTemplate::factory()->emailTemplate()->create();
 
-            $content = fake()->randomElement($emailTemplates);
             return [
+                'title' => $template->name,
+                'content' => $template->content,
                 'type' => 'email',
-                'content' => $content,
-                'character_count' => strlen($content),
+                'character_count' => strlen($template->content),
                 'sms_count' => 1,
+                'template_id' => $template->id,
             ];
         });
     }

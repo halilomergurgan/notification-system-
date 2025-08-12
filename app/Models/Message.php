@@ -23,6 +23,7 @@ use Carbon\Carbon;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property Carbon|null $deleted_at
+ * @property int $template_id
  *
  * @property-read MessageQueue[] $messageQueues
  *
@@ -46,6 +47,7 @@ class Message extends Model
         'variables',
         'is_active',
         'scheduled_at',
+        'template_id'
     ];
 
     /**

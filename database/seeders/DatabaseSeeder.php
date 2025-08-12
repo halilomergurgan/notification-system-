@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
             MessageSeeder::class,
             RecipientSeeder::class,
             MessageQueueSeeder::class,
+            MessageTemplateSeeder::class,
         ]);
     }
 }
