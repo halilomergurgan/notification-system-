@@ -132,8 +132,6 @@ Test amaçlı webhook kullanımı için:
     "status": "sent"
 }
 
-##  API Kullanımı
-
 ### API Dokümantasyonu
 
 Swagger dokümantasyonuna erişim:
@@ -144,7 +142,7 @@ http://localhost:8080/api/documentation
 ### Mesajları Listeleme
 
 **Query Parametreleri:**
-- `status` (opsiyonel): Mesaj durumuna göre filtreleme. Değerler: `pending`, `processing`, `sent`, `cancelled`, `failed`
+- `status` (opsiyonel): Mesaj durumuna göre filtreleme. Değerler: `pending`, `processing`, `sent`, `cancelled`, `failed` default: `sent`
 - `page` (opsiyonel): Sayfa numarası (varsayılan: 1)
 - `per_page` (opsiyonel): Sayfa başına kayıt sayısı (varsayılan: 20)
 - 
