@@ -2,12 +2,12 @@
 
 Laravel tabanlı bir bildirim yönetim sistemi. Bu sistem, mesajların kuyruk mekanizması ile işlenmesini ve harici servislere gönderilmesini sağlar.
 
-## 📋 Gereksinimler
+##  Gereksinimler
 
 - Docker ve Docker Compose
 - Git
 
-## 🚀 Kurulum
+##  Kurulum
 
 ### 1. Projeyi Klonlayın
 
@@ -78,7 +78,7 @@ docker exec -it sms_app php artisan migrate
 docker exec -it sms_app php artisan db:seed
 ```
 
-## 📦 Docker Container Yönetimi
+## Docker Container Yönetimi
 
 ### Container'a Giriş
 
@@ -119,7 +119,20 @@ Bu komut, bekleyen mesajları işlemek için kuyruk işlemini başlatır.
 docker exec -it sms_app php artisan queue:work
 ```
 
-## 📡 API Kullanımı
+### Webhook Test
+
+Test amaçlı webhook kullanımı için:
+
+1. [https://webhook.site](https://webhook.site) adresinden bir webhook URL'i alın
+2. Edit butonuna tıklayıp Content kısmına şu response'u girin:
+```json
+{
+    "message": "Accepted",
+    "messageId": "test-123",
+    "status": "sent"
+}
+
+##  API Kullanımı
 
 ### API Dokümantasyonu
 
@@ -186,7 +199,7 @@ docker exec -it sms_app php artisan test
 
 ```
 
-## 📊 Sistem Mimarisi
+##  Sistem Mimarisi
 
 ### Mesaj İşleme Akışı
 
@@ -213,7 +226,7 @@ docker exec -it sms_app php artisan route:clear
 docker exec -it sms_app php artisan l5-swagger:generate
 ```
 
-## 📝 Notlar
+## Notlar
 
 - Proje `http://localhost:8080` adresinde çalışır
 - MySQL veritabanına `localhost:3306` üzerinden erişebilirsiniz
