@@ -20,7 +20,7 @@ class WebhookService
 
     public function __construct()
     {
-        $this->webhookUrl = env('WEBHOOK_URL');
+        $this->webhookUrl =  env('WEBHOOK_URL', '');
         $this->authKey = env('WEBHOOK_AUTH_KEY', '1234567890');
     }
 

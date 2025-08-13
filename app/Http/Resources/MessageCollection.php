@@ -8,6 +8,11 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 class MessageCollection extends ResourceCollection
 {
     /**
+     * @var string
+     */
+    public $collects = MessageResource::class;
+
+    /**
      * Transform the resource collection into an array.
      *
      * @return array<int|string, mixed>
@@ -15,12 +20,12 @@ class MessageCollection extends ResourceCollection
     public function toArray(Request $request): array
     {
         return [
-            'data' => $this->collection,
+            'data' => MessageResource::collection($this->collection),
             'meta' => [
-                'total' => $this->total(),
-                'per_page' => $this->perPage(),
-                'current_page' => $this->currentPage(),
-                'last_page' => $this->lastPage(),
+                'total' => $this->resource->total(),
+                'per_page' => $this->resource->perPage(),
+                'current_page' => $this->resource->currentPage(),
+                'last_page' => $this->resource->lastPage(),
             ]
         ];
     }
