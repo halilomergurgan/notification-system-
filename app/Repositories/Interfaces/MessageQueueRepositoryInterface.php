@@ -49,11 +49,6 @@ interface MessageQueueRepositoryInterface extends BaseRepositoryInterface
     public function markAsFailed(int $id, array $providerResponse): MessageQueue;
 
     /**
-     * @return Collection
-     */
-    public function getSentMessages(): Collection;
-
-    /**
      * @param int $id
      * @param $scheduledAt
      * @return void

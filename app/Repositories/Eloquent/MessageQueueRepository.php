@@ -127,18 +127,6 @@ class MessageQueueRepository extends BaseRepository implements MessageQueueRepos
     }
 
     /**
-     * @return Collection
-     */
-    public function getSentMessages(): Collection
-    {
-        return $this->model->with(['message', 'recipient'])
-            ->where('status', 'sent')
-            ->whereNotNull('provider_message_id')
-            ->orderBy('sent_at', 'desc')
-            ->get();
-    }
-
-    /**
      * @param int $id
      * @param $scheduledAt
      * @return void

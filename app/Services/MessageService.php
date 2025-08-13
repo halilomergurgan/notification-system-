@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Repositories\Interfaces\MessageQueueRepositoryInterface;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Log;
 use Exception;
 
@@ -126,35 +127,21 @@ class MessageService
                 $messageQueue->id,
                 $response
             );
-        }
-    }
 
-    /**
-     * @return array
-     */
-    public function getSentMessages(): array
-    {
-        $messages = $this->messageQueueRepository->getSentMessages();
-
-        return $messages->map(function ($messageQueue) {
             return [
-                'id' => $messageQueue->id,
-                'message_id' => $messageQueue->message_id,
-                'recipient' => $messageQueue->recipient->country_code . $messageQueue->recipient->phone_number,
-                'content' => $messageQueue->personalized_content ?? $messageQueue->message->content,
-                'provider_message_id' => $messageQueue->provider_message_id,
-                'sent_at' => $messageQueue->sent_at->toIso8601String(),
-                'status' => $messageQueue->status
+                'status' => 'failed',
+                'messageId' => $message->id,
+                'error' => $response['error'] ?? 'Unknown error'
             ];
-        })->toArray();
+        }
     }
 
     /**
      * @param string $status
      * @param int $perPage
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @return LengthAwarePaginator
      */
-    public function getMessagesByStatus(string $status = 'sent', int $perPage = 20)
+    public function getMessagesByStatus(string $status = 'sent', int $perPage = 20): LengthAwarePaginator
     {
         return $this->messageQueueRepository->getMessagesByStatus($status, $perPage);
     }
