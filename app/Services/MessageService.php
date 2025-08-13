@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\MessageQueue;
 use App\Repositories\Interfaces\MessageQueueRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Log;
@@ -89,12 +90,9 @@ class MessageService
         $message = $messageQueue->message;
 
         if ($message->type === 'sms' && $message->character_count > 360) {
-            $this->messageQueueRepository->markAsFailed(
-                $messageQueue->id,
-                []
-            );
+            $this->messageQueueRepository->markAsCancelled($messageQueue->id);
 
-            return ['status' => 'failed', 'messageId' => $message->id];
+            return ['status' => MessageQueue::STATUS_CANCELLED, 'messageId' => $message->id];
         }
 
         $response = $this->webhookService->sendMessage(

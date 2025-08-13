@@ -98,7 +98,7 @@ class MessageQueueRepository extends BaseRepository implements MessageQueueRepos
     {
         $messageQueue = $this->find($id);
         $messageQueue->update([
-            'status' => 'sent',
+            'status' => MessageQueue::STATUS_SENT,
             'sent_at' => now(),
             'provider_message_id' => $providerMessageId,
             'provider_response' => $providerResponse
@@ -118,9 +118,24 @@ class MessageQueueRepository extends BaseRepository implements MessageQueueRepos
         $retryCount = $messageQueue->retry_count + 1;
 
         $messageQueue->update([
-            'status' => $retryCount >= $messageQueue->max_retries ? 'failed' : 'pending',
+            'status' => $retryCount >= $messageQueue->max_retries ? MessageQueue::STATUS_FAILED : MessageQueue::STATUS_PENDING,
             'retry_count' => $retryCount,
             'provider_response' => $providerResponse
+        ]);
+
+        return $messageQueue;
+    }
+
+    /**
+     * @param int $id
+     * @return MessageQueue
+     */
+    public function markAsCancelled(int $id): MessageQueue
+    {
+        $messageQueue = $this->find($id);
+
+        $messageQueue->update([
+            'status' => MessageQueue::STATUS_CANCELLED
         ]);
 
         return $messageQueue;
@@ -134,7 +149,8 @@ class MessageQueueRepository extends BaseRepository implements MessageQueueRepos
     public function updateScheduledAt(int $id, $scheduledAt): void
     {
         $this->model->where('id', $id)->update([
-            'scheduled_at' => $scheduledAt
+            'scheduled_at' => $scheduledAt,
+            'status' => MessageQueue::STATUS_PROCESSING
         ]);
     }
 

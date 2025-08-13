@@ -50,6 +50,12 @@ interface MessageQueueRepositoryInterface extends BaseRepositoryInterface
 
     /**
      * @param int $id
+     * @return MessageQueue
+     */
+    public function markAsCancelled(int $id): MessageQueue;
+
+    /**
+     * @param int $id
      * @param $scheduledAt
      * @return void
      */
