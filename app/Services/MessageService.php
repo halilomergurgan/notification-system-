@@ -148,4 +148,14 @@ class MessageService
             ];
         })->toArray();
     }
+
+    /**
+     * @param string $status
+     * @param int $perPage
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function getMessagesByStatus(string $status = 'sent', int $perPage = 20)
+    {
+        return $this->messageQueueRepository->getMessagesByStatus($status, $perPage);
+    }
 }

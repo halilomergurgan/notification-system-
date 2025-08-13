@@ -4,6 +4,7 @@ namespace App\Repositories\Interfaces;
 
 use App\Models\MessageQueue;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 interface MessageQueueRepositoryInterface extends BaseRepositoryInterface
 {
@@ -58,4 +59,11 @@ interface MessageQueueRepositoryInterface extends BaseRepositoryInterface
      * @return void
      */
     public function updateScheduledAt(int $id, $scheduledAt): void;
+
+    /**
+     * @param string $status
+     * @param int $perPage
+     * @return LengthAwarePaginator
+ */
+    public function getMessagesByStatus(string $status, int $perPage): LengthAwarePaginator;
 }

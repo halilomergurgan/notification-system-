@@ -5,6 +5,7 @@ namespace App\Repositories\Eloquent;
 use App\Models\MessageQueue;
 use App\Repositories\Interfaces\MessageQueueRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class MessageQueueRepository extends BaseRepository implements MessageQueueRepositoryInterface
 {
@@ -147,5 +148,18 @@ class MessageQueueRepository extends BaseRepository implements MessageQueueRepos
         $this->model->where('id', $id)->update([
             'scheduled_at' => $scheduledAt
         ]);
+    }
+
+    /**
+     * @param string $status
+     * @param int $perPage
+     * @return LengthAwarePaginator
+ */
+    public function getMessagesByStatus(string $status, int $perPage = 20): LengthAwarePaginator
+    {
+        return MessageQueue::with(['recipient', 'message'])
+            ->where('status', $status)
+            ->orderBy('sent_at', 'desc')
+            ->paginate($perPage);
     }
 }
